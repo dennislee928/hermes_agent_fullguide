@@ -3,21 +3,27 @@ name: Build Tauri App
 on:
   push:
     tags: ["v*"]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
             args: "--target x86_64-pc-windows-msvc"
+            target: x86_64-pc-windows-msvc
           - os: macos-latest
             args: "--target aarch64-apple-darwin"
+            target: aarch64-apple-darwin
           - os: macos-latest
             args: "--target x86_64-apple-darwin"
+            target: x86_64-apple-darwin
           - os: ubuntu-22.04
             args: ""
+            target: ""
 
     runs-on: ${{ matrix.os }}
 
@@ -31,7 +37,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.args != '' && (contains(matrix.args, 'aarch64') && 'aarch64-apple-darwin' || 'x86_64-pc-windows-msvc') || '' }}
+          targets: ${{ matrix.target }}
 
       - name: Install Linux deps
         if: runner.os == 'Linux'
@@ -41,7 +47,7 @@ jobs:
 
       - name: Install frontend deps
         working-directory: desktop-apps/tauri
-        run: npm ci
+        run: npm install
 
       - uses: tauri-apps/tauri-action@v0
         env:

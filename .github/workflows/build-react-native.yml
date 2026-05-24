@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: desktop-apps/react-native
-        run: npm ci
+        run: npm install
 
       - name: Setup Expo / EAS
         uses: expo/expo-github-action@v8
@@ -42,7 +42,7 @@ jobs:
         if: ${{ github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'all' || github.event_name == 'push' }}
         working-directory: desktop-apps/react-native
         run: eas build --platform ios --non-interactive --profile production
-        # Requires Apple Developer account credentials in EAS secrets:
+        # Requires Apple Developer account credentials stored as EAS secrets:
         # APPLE_ID, APPLE_TEAM_ID, ASC_APP_ID
 
       - name: Submit to stores (optional)
