@@ -8,3 +8,4 @@ build/
 .env.test.local
 .env.production.local
 /desktop-apps/react-native/node_modules
+/desktop-apps/tauri/src-tauri/target/debug
