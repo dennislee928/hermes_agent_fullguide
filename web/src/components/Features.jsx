@@ -41,6 +41,13 @@ const features = [
     tag: "Agents",
     tagClass: "tag-purple",
   },
+  {
+    icon: "📋",
+    title: "100+ Use Cases",
+    desc: "From daily life to dev tools — 100 ready-to-run recipes across 7 categories. Every one works fully offline.",
+    tag: "Use Cases",
+    tagClass: "tag-yellow",
+  },
 ];
 
 export default function Features() {
