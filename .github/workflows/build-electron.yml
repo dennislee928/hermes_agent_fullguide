@@ -3,7 +3,8 @@ name: Build Electron App
 on:
   push:
     tags: ["v*"]
-    branches: {main}
+    branches: [main]
+## barrier
   workflow_dispatch:
 
 jobs:
