@@ -1,0 +1,19 @@
+# Portable Ollama server with Hermes pre-loaded
+# Build: docker build -f Dockerfile.server -t hermes-server .
+# Run:   docker run -p 11434:11434 hermes-server
+
+FROM ollama/ollama:latest
+
+ENV OLLAMA_HOST=0.0.0.0
+ENV OLLAMA_ORIGINS=*
+
+# Pre-pull the model during build (bakes it into the image — large but self-contained)
+# Comment out to keep the image small and pull at runtime instead
+RUN ollama serve & \
+    sleep 5 && \
+    ollama pull hf.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF && \
+    pkill ollama || true
+
+EXPOSE 11434
+
+CMD ["serve"]
