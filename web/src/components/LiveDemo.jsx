@@ -15,8 +15,11 @@ const MODES = [
 const TOOL_STUBS = {
   get_weather: (args) => `{"city":"${args.city || 'Tokyo'}","temperature":22,"unit":"celsius","condition":"Partly cloudy","humidity":68}`,
   calculate: (args) => {
-    try { return String(eval(args.expression.replace(/[^0-9+\-*/().% ]/g, ""))); }
-    catch { return "Error evaluating expression"; }
+    try {
+      const expr = args.expression.replace(/[^0-9+\-*/().% ]/g, "");
+      const fn = new Function(`"use strict"; return (${expr})`);
+      return String(fn());
+    } catch { return "Error evaluating expression"; }
   },
   web_search: (args) => `Top results for "${args.query}": 1. Wikipedia article, 2. Recent news coverage, 3. Official documentation. [Simulated results — connect real search API for live data]`,
 };
