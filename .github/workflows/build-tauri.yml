@@ -35,6 +35,11 @@ jobs:
           node-version: "20"
 
       - name: Install Rust
+        if: matrix.target == ''
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Rust target
+        if: matrix.target != ''
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -47,7 +52,7 @@ jobs:
 
       - name: Install frontend deps
         working-directory: desktop-apps/tauri
-        run: npm install
+        run: npm ci
 
       - uses: tauri-apps/tauri-action@v0
         env:

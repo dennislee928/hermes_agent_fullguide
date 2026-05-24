@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Hermes",
+    "slug": "hermes-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "bundleIdentifier": "com.hermes.mobile"
+    },
+    "android": {
+      "package": "com.hermes.mobile"
+    }
+  }
+}

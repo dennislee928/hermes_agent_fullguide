@@ -1,8 +1,10 @@
 {
   "name": "hermes-tauri",
   "version": "1.0.0",
+  "private": true,
+  "description": "Hermes AI desktop chat app",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1 --port 1420",
     "build": "vite build",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
