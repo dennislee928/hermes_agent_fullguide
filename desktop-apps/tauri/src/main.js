@@ -11,6 +11,7 @@ const messagesEl = document.getElementById("messages");
 const inputEl = document.getElementById("input");
 const sendBtn = document.getElementById("send");
 const modelSelect = document.getElementById("model");
+const composerEl = document.getElementById("composer");
 
 async function loadModels() {
   const res = await fetch(`${OLLAMA}/api/tags`);
@@ -46,7 +47,7 @@ async function send() {
       body: JSON.stringify({ model: modelSelect.value, messages: history, stream: false }),
     });
     const data = await res.json();
-    const reply = data.message.content;
+    const reply = data.message?.content ?? "No response";
     el.textContent = reply;
     history.push({ role: "assistant", content: reply });
   } catch (e) {
@@ -56,7 +57,10 @@ async function send() {
   }
 }
 
-sendBtn.addEventListener("click", send);
+composerEl.addEventListener("submit", (e) => {
+  e.preventDefault();
+  send();
+});
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
 });
