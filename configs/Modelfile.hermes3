@@ -1,0 +1,23 @@
+FROM hf.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF
+
+# Hermes uses ChatML format — this system prompt sets the agent persona
+SYSTEM """You are Hermes, a helpful AI assistant. You follow instructions carefully and think step by step before answering. When using tools or writing code, you are precise and thorough."""
+
+# Hermes-optimized sampling parameters
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9
+PARAMETER top_k 40
+PARAMETER repeat_penalty 1.1
+PARAMETER num_ctx 8192
+
+# ChatML stop tokens
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|im_start|>"
+
+# Template — Hermes ChatML format
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{ range .Messages }}<|im_start|>{{ .Role }}
+{{ .Content }}<|im_end|>
+{{ end }}<|im_start|>assistant
+"""
