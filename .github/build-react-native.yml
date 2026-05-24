@@ -1,0 +1,53 @@
+name: Build React Native App (EAS)
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to build"
+        required: true
+        default: "all"
+        type: choice
+        options: [all, android, ios]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: desktop-apps/react-native
+        run: npm ci
+
+      - name: Setup Expo / EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Android (.apk / .aab)
+        if: ${{ github.event.inputs.platform == 'android' || github.event.inputs.platform == 'all' || github.event_name == 'push' }}
+        working-directory: desktop-apps/react-native
+        run: eas build --platform android --non-interactive --profile production
+
+      - name: Build iOS (.ipa)
+        if: ${{ github.event.inputs.platform == 'ios' || github.event.inputs.platform == 'all' || github.event_name == 'push' }}
+        working-directory: desktop-apps/react-native
+        run: eas build --platform ios --non-interactive --profile production
+        # Requires Apple Developer account credentials in EAS secrets:
+        # APPLE_ID, APPLE_TEAM_ID, ASC_APP_ID
+
+      - name: Submit to stores (optional)
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: desktop-apps/react-native
+        run: |
+          eas submit --platform android --non-interactive || true
+          eas submit --platform ios --non-interactive || true
