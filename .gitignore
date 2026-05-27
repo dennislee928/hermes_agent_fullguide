@@ -15,3 +15,4 @@ src-tauri/gen/
 /desktop-apps/tauri/src-tauri/gen
 /desktop-apps/tauri/src-tauri/target
 /desktop-apps/tauri/src-tauri/target/debug
+.DS_Store
